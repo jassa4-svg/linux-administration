@@ -2,11 +2,15 @@
 <html lang="fi">
 <head>
     <meta charset="UTF-8">
-    <title>Viikko 2</title>
+    <title>Viikko 2||python-sovellus</title>
 </head>
 <body>
-    <h1>Viikko 2: Python-verkkosovellus</h1>
+    <div style="background-color: coral;">
+        <h1>Viikko 2: Python-verkkosovellus</h1>
+    </div>
     <p>Sivun latauksia: {{ kaynnit }}</p>
+    <p><a href="https://github.com/jassa4-svg/linux-administration">Github</a></p>
     <p><a href="/">Viikon 1 etusivulle</a></p>
+    <h4>app.py sivun latauksen yhteydessä kutsuuu funktion joka hakee tietokantayhteyden, ja kasvattaa laskuria.</h4>
 </body>
 </html>
