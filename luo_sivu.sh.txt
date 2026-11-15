@@ -29,9 +29,14 @@ cat > "$KOHDE" <<EOF
 <body>
   <h1>Tervetuloa palvelimelle $(hostname)</h1>
   <p>Sivu päivitetty: $(date '+%d.%m.%Y %H:%M UTC %:::z')</p>
-  <p>Sivu päivitetty: $(uptime -p)</p>
- <p>Sivu päivitetty: $(free -h | awk '/^Mem:/ {print "Total:", $2, "| Available:", $7}')<p>
+  <p>käynnissäoloaika: $(uptime -p)</p>
+  <p>muisti: $(free -h | awk '/^Mem:/ {print "Total:", $2, "| Available:", $7}')</p>
+  <p>Juuritiedostojärjestelmän levytilan käyttö: $(df -P / | awk 'NR == 2 {print $5}')</p>
 <p>Toimii uudelleenkäynnistyksen jälkeen</p>
+
+ <p>date näyttää päivämäärän ja kellonajan. Flagien avulla myös aikavyöhykkeen. Uptime näyttää palvelimen
+käynnissäoloajan. $(df -P / | awk 'NR == 2 {print $5}' Poimii levytilan käyttöprosentin juuritiedostojärjestelmästä.)</p>
+
 
 </body>
 </html>
