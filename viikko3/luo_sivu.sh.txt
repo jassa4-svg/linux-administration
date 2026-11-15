@@ -44,8 +44,10 @@ cat > "$KOHDE" <<EOF
   <p>Toimii uudelleenkäynnistyksen jälkeen ja syntaksitarkistus onnistui.</p>
     <p>Levyn käyttöaste näkyy punaisena, jos se on yli 50 %. Testi näytti tämän toimivan.</p>
   <p>date näyttää päivämäärän ja kellonajan, ja flagien avulla myös aikavyöhykkeen. Uptime näyttää palvelimen käynnissäoloajan. cp file file2. kopioi tiedoston. </p>
+	
+  <p><a href="https://github.com/jassa4-svg/linux-administration">Github</a></p> 
 
- <p>Bash on haastavaa, mutta sitä on mukava opetella. Ehkä eniten vaikeuttaa se että pitää muistaa niin paljon flageja.</p>
+<p>Bash on haastavaa, mutta sitä on mukava opetella. Ehkä eniten vaikeuttaa se että pitää muistaa niin paljon flageja.</p>
 </body>
 </html>
 
