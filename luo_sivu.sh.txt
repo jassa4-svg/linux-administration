@@ -3,13 +3,22 @@
 # Ajo: sudo ./luo_etusivu.sh
 set -euo pipefail
 
-
-KOHDE="/var/www/html/index.html"
+KOHDE="/var/www/viikko3/index.html"
+DISK_UTIL=$(df -P / | awk 'NR==2 {print $5}' | tr -d '%')
 
 # 1. Tarkista, että skripti ajetaan root-oikeuksilla (EUID 0 = root)
 if [[ $EUID -ne 0 ]]; then
   echo "Aja skripti sudolla: sudo $0" >&2
   exit 1
+fi
+
+# Katso levyn käyttöaste
+if [ "$DISK_UTIL" -gt 50 ]; then
+    STATUS="WARNING"
+    COLOR="RED"
+else
+    STATUS="OK"
+    COLOR="GREEN"
 fi
 
 # 2. Ota varmuuskopio vanhasta sivusta
@@ -18,28 +27,28 @@ if [[ -f "$KOHDE" ]]; then
 fi
 
 # 3. Here-document: kaikki rivit "<<EOF" ja "EOF" välissä kirjoitetaan tiedostoon.
-#    Koska EOF ei ole lainausmerkeissä, $(hostname) ja $(date) korvautuvat arvoillaan.
 cat > "$KOHDE" <<EOF
 <!DOCTYPE html>
 <html lang="fi">
 <head>
   <meta charset="UTF-8">
-  <title>tervetuloa $(hostname)</title>
+  <title>Tervetuloa $(hostname)</title>
+  <style>.status { color: $COLOR; font-weight: bold; }</style>
 </head>
 <body>
   <h1>Tervetuloa palvelimelle $(hostname)</h1>
-  <p>Sivu päivitetty: $(date '+%d.%m.%Y %H:%M UTC %:::z')</p>
-  <p>käynnissäoloaika: $(uptime -p)</p>
-  <p>muisti: $(free -h | awk '/^Mem:/ {print "Total:", $2, "| Available:", $7}')</p>
-  <p>Juuritiedostojärjestelmän levytilan käyttö: $(df -P / | awk 'NR == 2 {print $5}')</p>
-<p>Toimii uudelleenkäynnistyksen jälkeen</p>
+  <p>Sivu päivitetty: $(date '+%d.%m.%Y %H:%M %Z (%z)')</p>
+  <p>Käynnissäoloaika: $(uptime -p)</p>
+  <p>Muisti: $(free -h | awk '/^Mem:/ {print "Total:", $2, "| Available:", $7}')</p>
+  <p>Juuritiedostojärjestelmän levytilan käyttö: <span class="status">${DISK_UTIL}% ($STATUS)</span></p>
+  <p>Toimii uudelleenkäynnistyksen jälkeen ja syntaksitarkistus onnistui.</p>
+    <p>Levyn käyttöaste näkyy punaisena, jos se on yli 50 %. Testi näytti tämän toimivan.</p>
+  <p>date näyttää päivämäärän ja kellonajan, ja flagien avulla myös aikavyöhykkeen. Uptime näyttää palvelimen käynnissäoloajan. cp file file2. kopioi tiedoston. </p>
 
- <p>date näyttää päivämäärän ja kellonajan. Flagien avulla myös aikavyöhykkeen. Uptime näyttää palvelimen
-käynnissäoloajan. $(df -P / | awk 'NR == 2 {print $5}' Poimii levytilan käyttöprosentin juuritiedostojärjestelmästä.)</p>
-
-
+ <p>Bash on haastavaa, mutta sitä on mukava opetella. Ehkä eniten vaikeuttaa se että pitää muistaa niin paljon flageja.</p>
 </body>
 </html>
+
 EOF
 
 # 4. Nginx lukee tiedoston käyttäjänä www-data, joten muilla pitää olla lukuoikeus
